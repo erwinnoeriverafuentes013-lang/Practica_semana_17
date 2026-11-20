@@ -1,0 +1,76 @@
+{% extends 'inventario/base.html' %}
+{% block content %}
+    <h1>{{ titulo }}</h1>
+
+    {% if tipo == 'categoria' %}
+        <a href="{% url 'crear_categoria' %}" class="btn btn-primary">+ Nueva Categoría</a>
+        <table>
+            <thead>
+                <tr><th>Nombre</th><th>Descripción</th><th>Activa</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.descripcion|default:"-" }}</td>
+                    <td>{{ item.activa|yesno:"Sí,No" }}</td>
+                    <td>
+                        <a href="{% url 'editar_categoria' item.pk %}" class="btn btn-warning">Editar</a>
+                        <a href="{% url 'eliminar_categoria' item.pk %}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">Sin registros.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% elif tipo == 'marca' %}
+        <a href="{% url 'crear_marca' %}" class="btn btn-primary">+ Nueva Marca</a>
+        <table>
+            <thead>
+                <tr><th>Nombre</th><th>País</th><th>Sitio web</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.pais_origen }}</td>
+                    <td>{{ item.sitio_web|default:"-" }}</td>
+                    <td>
+                        <a href="{% url 'editar_marca' item.pk %}" class="btn btn-warning">Editar</a>
+                        <a href="{% url 'eliminar_marca' item.pk %}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">Sin registros.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% elif tipo == 'instrumento' %}
+        <a href="{% url 'crear_instrumento' %}" class="btn btn-primary">+ Nuevo Instrumento</a>
+        <table>
+            <thead>
+                <tr><th>Modelo</th><th>Categoría</th><th>Marca</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.modelo }}</td>
+                    <td>{{ item.categoria.nombre }}</td>
+                    <td>{{ item.marca.nombre }}</td>
+                    <td>${{ item.precio }}</td>
+                    <td>{{ item.stock }}</td>
+                    <td>
+                        <a href="{% url 'editar_instrumento' item.pk %}" class="btn btn-warning">Editar</a>
+                        <a href="{% url 'eliminar_instrumento' item.pk %}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6">Sin registros.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
